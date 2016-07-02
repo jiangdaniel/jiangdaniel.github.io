@@ -31,7 +31,7 @@ gulp.task('scripts', function() {
 });
 
 /* Deploy to gh-pages */
-gulp.task('deploy-gh-pages', function() {
+gulp.task('deploy-gh-pages', ['default'], function() {
   return gulp.src('dist/**/*')
     .pipe(ghPages());
 });
