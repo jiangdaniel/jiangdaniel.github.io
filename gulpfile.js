@@ -3,6 +3,7 @@ const uglify      = require('gulp-uglify');
 const ghPages     = require('gulp-gh-pages');
 const sass        = require('gulp-ruby-sass');
 const browserSync = require('browser-sync').create();
+const reload      = browserSync.reload;
 const vulcanize   = require('gulp-vulcanize');
 const del         = require('del');
 const runSequence = require('run-sequence');
@@ -36,14 +37,19 @@ gulp.task('deploy-gh-pages', ['default'], function() {
     .pipe(ghPages());
 });
 
-gulp.task('serve', ['default'], function() {
+gulp.task('serve', function() {
     browserSync.init({
         port: 5000,
         notify: false,
         server: {
-            baseDir: "dist"
+            baseDir: "src"
         }
     });
+
+    gulp.watch(['src/**/*.html', '!app/bower_components/**/*.html'], reload);
+    gulp.watch(['src/**/*.css'], reload);
+    gulp.watch(['src/**/*.js'], reload);
+    gulp.watch(['src/images/**/*'], reload);
 });
 
 gulp.task('copy', ['copy-bower'], function() {
