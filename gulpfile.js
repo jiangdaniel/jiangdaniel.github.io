@@ -9,16 +9,6 @@ const del         = require('del');
 const runSequence = require('run-sequence');
 
 
-
-// gulp.task('default', ['clean'], function(cb) {
-//   // Uncomment 'cache-config' if you are going to use service workers.
-//   runSequence(
-//     ['ensureFiles', 'copy', 'styles'],
-//     ['images', 'fonts', 'html'],
-//     'vulcanize', // 'cache-config',
-//     cb);
-// });
-
 gulp.task('default', ['clean'], function() {
   return runSequence(
     ['copy', 'vulcanize']
@@ -63,10 +53,22 @@ gulp.task('copy', ['copy-bower'], function() {
 });
 
 gulp.task('copy-bower', function() {
+  return runSequence(
+    ['copy-webcomponentsjs', 'copy-pagejs']
+  );
+});
+
+gulp.task('copy-webcomponentsjs', function() {
   return gulp.src([
   'src/bower_components/webcomponentsjs/webcomponents-lite.min.js'
 ]).pipe(gulp.dest('dist/bower_components/webcomponentsjs'));
-})
+});
+
+gulp.task('copy-pagejs', function() {
+  return gulp.src([
+  'src/bower_components/page/page.js'
+]).pipe(gulp.dest('dist/bower_components/page'));
+});
 
 gulp.task('clean', function() {
   return del(['./dist/']);

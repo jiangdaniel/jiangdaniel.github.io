@@ -40,7 +40,19 @@
 </template>
 <script>
     Polymer({
-        is: "web-app"
+        is: "web-app",
+        ready: function() {
+
+		/* Redirects if the url is just /sea5 and has no hash */
+		page('/', function() {
+			page.redirect('/#/');
+		});
+
+		/* Tells page.js to use hashbangs */
+		page({
+        	hashbang: true
+        });
+	},
     });
 </script>
 </dom-module>
