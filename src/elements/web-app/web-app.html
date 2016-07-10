@@ -21,6 +21,8 @@
         data="{{data}}"
         tail="{{tail}}">
     </app-route>
+    <iron-media-query query="(max-width: 650px)" query-matches="{{mobile}}"></iron-media-query>
+
     <paper-drawer-panel force-narrow>
 
         <paper-header-panel drawer>
@@ -35,7 +37,7 @@
 
         <paper-scroll-header-panel main>
             <paper-toolbar>
-                <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                <paper-icon-button icon="menu" paper-drawer-toggle hidden$="[[!mobile]]"></paper-icon-button>
                 <span>Daniel Jiang</span>
             </paper-toolbar>
             <iron-pages attr-for-selected="data-route" selected="[[data.page]]" fallback-selection="home">
