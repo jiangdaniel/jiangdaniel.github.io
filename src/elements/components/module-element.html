@@ -1,5 +1,3 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-
 <dom-module id="module-element">
 <template>
     <style>
@@ -32,6 +30,22 @@
             top: 50%;
             transform: translateY(-50%);
         }
+        @media screen and (max-width:650px) {
+            :host {
+                min-height: 0;
+            }
+            :host > ::content [text] {
+                width: 100%;
+                min-height: 0;
+            }
+            :host > ::content [image] {
+                position: relative;
+                height: 100px;
+                top: 0;
+                transform: translateY(0);
+            }
+        }
+	}
     </style>
     <content></content>
 </template>
