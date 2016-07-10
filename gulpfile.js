@@ -22,9 +22,9 @@ gulp.task('scripts', function() {
 });
 
 /* Deploy to gh-pages */
-gulp.task('deploy-gh-pages', ['default'], function() {
+gulp.task('deploy-gh-pages', function() {
   return gulp.src('dist/**/*')
-    .pipe(ghPages());
+    .pipe(ghPages({force: true}));
 });
 
 gulp.task('serve', function() {
@@ -44,7 +44,7 @@ gulp.task('serve', function() {
 
 gulp.task('copy', ['copy-bower'], function() {
   return gulp.src([
-    'src/*',
+    'src/**/*',
     '!src/elements',
     '!src/bower_components',
     '!**/.DS_Store'
@@ -75,7 +75,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('vulcanize', function() {
-  return gulp.src('./src/elements/elements.html')
+  return gulp.src('src/elements/elements.html')
     .pipe(vulcanize({
       stripComments: true,
       inlineCss: true,
