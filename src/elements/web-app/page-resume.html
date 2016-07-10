@@ -27,7 +27,8 @@
             margin-left: 10px;
         }
         paper-card {
-            max-width: 475px;
+            /*max-width: 475px;*/
+            min-width: 300px;
             margin: 20px 10px;
         }
         paper-card a {
@@ -79,7 +80,7 @@
         </div>
     </module-element>
     <div id="card-wrapper" class="container horizontal layout around-justified wrap">
-        <paper-card image="../../assets/images/website.png">
+        <paper-card class="flex" image="../../assets/images/website.png">
             <div class="card-content">
                 Pioneers in Engineering Website
             </div>
@@ -88,13 +89,13 @@
                 <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
             </div>
         </paper-card>
-        <paper-card image="../../assets/images/finalcomp.png">
+        <paper-card class="flex" image="../../assets/images/finalcomp.png">
             <div class="card-content">
                 Final Competition Website
             </div>
             <div class="card-actions">
                 <a href="https://github.com/pioneers/website" target="_blank"><paper-button>Code</paper-button></a>
-                <a href="https://finalcomp.pierobotics.org" target="_blank"><paper-button>Explore!</paper-button></a>
+                <a href="https://finalcomp.pierobotics.org" target="_blank"><paper-button>Website</paper-button></a>
             </div>
         </paper-card>
     </div>
