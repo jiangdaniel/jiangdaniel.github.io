@@ -1,6 +1,18 @@
 <dom-module id="page-home">
 <template>
-    <div>Hi, my name is Daniel.</div>
+    <style include="shared-styles">
+        #body {
+            height: 100vh;
+            width: 100vw;
+            background-image: url(../../assets/images/banner.jpg);
+            background-size: cover;
+        }
+    </style>
+    <div id="body">
+        <div class="container">
+            <div><span style="font-size: 50px;">Hello.</span></div>
+        </div>
+    </div>
 </template>
 <script>
     Polymer({
