@@ -13,6 +13,10 @@
         a {
             text-decoration: inherit;
         }
+        #logo {
+            font-family: "Courgette", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 25px;
+        }
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
@@ -38,7 +42,7 @@
         <paper-scroll-header-panel main>
             <paper-toolbar>
                 <paper-icon-button icon="menu" paper-drawer-toggle hidden$="[[!mobile]]"></paper-icon-button>
-                <span>Daniel Jiang</span>
+                <span id="logo">Daniel Jiang</span>
                 <div style="position:absolute;right:0;" hidden$="[[mobile]]">
                     <a href="#/">Home</a>
                     <a href="#/resume">Resume</a>
