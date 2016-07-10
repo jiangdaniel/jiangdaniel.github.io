@@ -2,7 +2,7 @@
 
 <dom-module id="page-resume">
 <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex-alignment iron-flex">
         #resume-intro {
             text-align: center;
             margin: 20px 0 50px 0;
@@ -25,6 +25,13 @@
         .locations {
             font-size: 16px;
             margin-left: 10px;
+        }
+        paper-card {
+            max-width: 475px;
+            margin: 20px 10px;
+        }
+        paper-card a {
+            text-decoration: none;
         }
     </style>
 
@@ -71,14 +78,23 @@
             </div>
         </div>
     </module-element>
-    <div class="container">
-        <paper-card image="http://placehold.it/350x150/FFC107/000000">
+    <div id="card-wrapper" class="container horizontal layout around-justified wrap">
+        <paper-card image="../../assets/images/website.png">
             <div class="card-content">
-                Emmentaler or Emmental is a yellow, medium-hard cheese that originated in the area around Emmental, Switzerland. It is one of the cheeses of Switzerland, and is sometimes known as Swiss cheese.
+                Pioneers in Engineering Website
             </div>
             <div class="card-actions">
-                <paper-button>Share</paper-button>
-                <paper-button>Explore!</paper-button>
+                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
+                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
+            </div>
+        </paper-card>
+        <paper-card image="../../assets/images/finalcomp.png">
+            <div class="card-content">
+                Final Competition Website
+            </div>
+            <div class="card-actions">
+                <a href="https://github.com/pioneers/website" target="_blank"><paper-button>Code</paper-button></a>
+                <a href="https://finalcomp.pierobotics.org" target="_blank"><paper-button>Explore!</paper-button></a>
             </div>
         </paper-card>
     </div>
