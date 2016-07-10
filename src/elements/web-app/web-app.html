@@ -9,6 +9,7 @@
         paper-toolbar {
             --paper-toolbar-background: white;
             color: var(--text-black);
+            --paper-toolbar-height: 80px;
         }
         a {
             text-decoration: inherit;
@@ -16,6 +17,27 @@
         #logo {
             font-family: "Courgette", "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 25px;
+            margin-left: 10px;
+        }
+        #nav-wrapper {
+            position: absolute;
+            display: inline-block;
+            margin-right: 40px;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            /*height: 100%;*/
+        }
+        .nav-items {
+            position: relative;
+            margin-left: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            /*top: 50%;
+            transform: translateY(-50%);*/
         }
     </style>
     <app-location route="{{route}}" use-hash-as-path></app-location>
@@ -43,9 +65,9 @@
             <paper-toolbar>
                 <paper-icon-button icon="menu" paper-drawer-toggle hidden$="[[!mobile]]"></paper-icon-button>
                 <span id="logo">Daniel Jiang</span>
-                <div style="position:absolute;right:0;" hidden$="[[mobile]]">
-                    <a href="#/">Home</a>
-                    <a href="#/resume">Resume</a>
+                <div id="nav-wrapper" style="position:absolute;right:0;" hidden$="[[mobile]]">
+                    <a class="nav-items" href="#/">Home</a>
+                    <a class="nav-items" href="#/resume">Resume</a>
                 </div>
             </paper-toolbar>
             <iron-pages attr-for-selected="data-route" selected="[[data.page]]" fallback-selection="home">
