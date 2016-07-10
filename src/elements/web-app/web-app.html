@@ -39,6 +39,10 @@
             <paper-toolbar>
                 <paper-icon-button icon="menu" paper-drawer-toggle hidden$="[[!mobile]]"></paper-icon-button>
                 <span>Daniel Jiang</span>
+                <div style="position:absolute;right:0;">
+                    <a href="#/">Home</a>
+                    <a href="#/resume">Resume</a>
+                </div>
             </paper-toolbar>
             <iron-pages attr-for-selected="data-route" selected="[[data.page]]" fallback-selection="home">
                 <page-home data-route="home"></page-home>
