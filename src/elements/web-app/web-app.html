@@ -60,7 +60,7 @@
             <paper-item paper-drawer-toggle>Contact<paper-ripple></paper-item>
         </paper-header-panel>
 
-        <paper-scroll-header-panel main>
+        <paper-scroll-header-panel id="main" main>
             <paper-toolbar>
                 <paper-icon-button icon="menu" paper-drawer-toggle hidden$="[[!mobile]]"></paper-icon-button>
                 <div style="width:10px;" hidden$="[[mobile]]"></div>
@@ -70,7 +70,7 @@
                     <a class="nav-items" href="#/resume"><paper-button>Resume</paper-button></a>
                 </div>
             </paper-toolbar>
-            <iron-pages attr-for-selected="data-route" selected="[[data.page]]" fallback-selection="home">
+            <iron-pages id="page-switcher" attr-for-selected="data-route" selected="[[data.page]]" fallback-selection="home">
                 <page-home data-route="home"></page-home>
                 <page-resume data-route="resume"></page-resume>
             </iron-pages>
@@ -95,16 +95,22 @@
         is: "web-app",
         ready: function() {
 
-		/* Redirects if the url is just / and has no hash */
-		page('/', function() {
-			page.redirect('/#/');
-		});
+    		/* Redirects if the url is just / and has no hash */
+    		page('/', function() {
+    			page.redirect('/#/');
+    		});
 
-		/* Tells page.js to use hashbangs */
-		page({
-        	hashbang: true
-        });
-	},
+    		/* Tells page.js to use hashbangs */
+    		page({
+            	hashbang: true
+            });
+	    },
+        listeners: {
+            'page-switcher.iron-select': 'scrollToTop'
+        },
+        scrollToTop: function() {
+            this.$.main.scrollToTop();
+        }
     });
 </script>
 </dom-module>
