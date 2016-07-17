@@ -7,8 +7,13 @@
             text-align: center;
             margin: 20px 0 50px 0;
         }
+        .heading {
+            text-align: center;
+            margin-top: 100px;
+            margin-bottom: 20px;
+        }
         module-element {
-            font-weight: lighter;
+            //font-weight: lighter;
             color: white;
             background-color: rgba(0, 0, 0, .45);
             background-blend-mode: multiply;
@@ -35,12 +40,36 @@
         paper-card a {
             text-decoration: none;
         }
+        .card-heading {
+            font-size: 20px;
+        }
     </style>
 
     <div id="resume-intro">
         <h1>Resume</h1>
         <p>Take a look at a summary of my resume.</p>
     </div>
+    <h2 class="heading">Education</h2>
+
+    <module-element-2>
+        <div class="container">
+            <img src="../../assets/images/cal.svg" image></img>
+            <div text>
+                <div primary>University of California, Berkeley</div>
+                <div secondary>B.A. Computer Science, expected May 2019<br>GPA: 4.00</div>
+                <p main>Relevant courses:
+                    <ul>
+                        <li>CompSci 61A: The Structure and Interpretation of Computer Programs</li>
+                        <li>Math 54: Linear Algebra and Differential Equations</li>
+                        <li>Math 1B: Calculus</li>
+                        <li>Computer Science and Information Systems 10A: Programming Methods I: Java</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+    </module-element-2>
+
+    <h2 class="heading">Technical Skills</h2>
 
     <bag-of-stuff>
         <li item>Python</li>
@@ -49,15 +78,16 @@
         <li item>JavaScript</li>
         <li item>Google Polymer</li>
         <li item>Web Components</li>
-        <li item>Docker</li>
         <li item>Git</li>
     </bag-of-stuff>
+
+    <h2 class="heading">Technical Skills</h2>
 
     <module-element id="nasa">
         <div class="container">
             <img src="../../assets/images/nasa.svg" image></img>
             <div text>
-                <div primary>Intern,</div>
+                <div primary>Software Development Intern,</div>
                 <div secondary>NASA<span class="locations">Greenbelt, MD</span></div>
                 <div tertiary>June 2016 - present</div>
                 <p main>During the summer of 2016, I interned for the
@@ -66,6 +96,20 @@
             </div>
         </div>
     </module-element>
+
+    <div class="container horizontal layout around-justified wrap">
+        <paper-card class="flex" image="assets/images/website.png">
+            <div class="card-content">
+                <span class="card-heading">SEA<sup>5</sup></span><br><br>
+                Technologies used: HTML, SASS, JavaScript, JSON, Web Components, Google Polymer, Gulp, Docker, Google Sheets API
+            </div>
+            <div class="card-actions">
+                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
+                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
+            </div>
+        </paper-card>
+    </div>
+
 
     <module-element id="pioneers">
         <div class="container">
@@ -80,10 +124,11 @@
             </div>
         </div>
     </module-element>
-    <div id="card-wrapper" class="container horizontal layout around-justified wrap">
+    <div class="container horizontal layout around-justified wrap">
         <paper-card class="flex" image="assets/images/website.png">
             <div class="card-content">
-                Pioneers in Engineering Website
+                <span class="card-heading">Pioneers in Engineering Website</span><br><br>
+                Technologies used: HTML, SASS, JavaScript, JSON, Web Components, Google Polymer, Gulp, Docker, Google Sheets API
             </div>
             <div class="card-actions">
                 <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
@@ -92,7 +137,8 @@
         </paper-card>
         <paper-card class="flex" image="assets/images/finalcomp.png">
             <div class="card-content">
-                Final Competition Website
+                <span class="card-heading">Final Competition Website</span><br><br>
+                Technologies used: HTML, SASS, Jekyll, Bootstrap
             </div>
             <div class="card-actions">
                 <a href="https://github.com/pioneers/website" target="_blank"><paper-button>Code</paper-button></a>
