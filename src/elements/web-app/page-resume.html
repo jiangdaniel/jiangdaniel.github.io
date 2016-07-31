@@ -43,6 +43,20 @@
         .card-heading {
             font-size: 20px;
         }
+
+        /*Temp styles for projects*/
+        .category-header {
+        }
+        .project-wrapper {
+            margin: 20px 0 60px 0;
+        }
+        .project-header {
+            font-size: 30px;
+            margin: 25px 0 15px 0;
+        }
+        .project-image {
+            width: 50%;
+        }
     </style>
 
     <div id="resume-intro">
@@ -97,7 +111,20 @@
         </div>
     </module-element>
 
-    <div class="container horizontal layout around-justified wrap">
+    <div class="container">
+        <!-- <div class="category-header">Projects</div> -->
+
+        <div class="project-wrapper">
+            <div class="project-header">Space Environment Automated Alert & Anomaly Analysis Assistant (SEA<sup>5</sup>)</div>
+            <img src="../../assets/images/sea5.png" alt="Screenshot of SEA5" class="project-image"></img>
+            <p>
+                SEA<sup>5</sup> is a web application that aims to provide past, present, and predicted space environment information for specific missions, orbits, and user-specified locations throughout the heliosphere, geospace, and on the ground.<br><br>
+                <i>Technologies used: HTML, CSS, JavaScript, Java, Web Components, Google Polymer, Plotly.js</i>
+            </p>
+        </div>
+    </div>
+
+    <!-- <div class="container horizontal layout around-justified wrap">
         <paper-card class="flex" image="assets/images/website.png">
             <div class="card-content">
                 <span class="card-heading">SEA<sup>5</sup></span><br><br>
@@ -105,11 +132,11 @@
                 Technologies used: HTML, CSS, JavaScript, Java, Web Components, Google Polymer, Plotly.js
             </div>
             <div class="card-actions">
-                <!-- <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
-                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a> -->
+                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
+                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
             </div>
         </paper-card>
-    </div>
+    </div> -->
 
 
     <module-element id="pioneers">
@@ -125,7 +152,26 @@
             </div>
         </div>
     </module-element>
-    <div class="container horizontal layout around-justified wrap">
+    <div class="container">
+        <div class="project-wrapper">
+            <div class="project-header">Final Competition Website</div>
+            <img src="../../assets/images/finalcomp.png" alt="Screenshot of Final Competition Website" class="project-image"></img>
+            <p>
+                The Final Competition Website provided a modern, app-like way of accessing the robotics competition match schedule and information.<br><br>
+                <i>Technologies used: HTML, SASS, JavaScript, Web Components, Google Polymer, Gulp, Docker, Google Sheets API</i>
+            </p>
+        </div>
+
+        <div class="project-wrapper">
+            <div class="project-header">Pioneers in Engineering Website</div>
+            <img src="../../assets/images/website.png" alt="Screenshot of Pioneers in Engineering Website" class="project-image"></img>
+            <p>
+                The Pioneers in Engineering Website is the main website representing the organization Pioneers in Engineering.<br><br>
+                <i>Technologies used: HTML, SASS, Jekyll, Bootstrap</i>
+            </p>
+        </div>
+    </div>
+    <!-- <div class="container horizontal layout around-justified wrap">
         <paper-card class="flex" image="assets/images/website.png">
             <div class="card-content">
                 <span class="card-heading">Pioneers in Engineering Website</span><br><br>
@@ -146,7 +192,7 @@
                 <a href="https://finalcomp.pierobotics.org" target="_blank"><paper-button>Website</paper-button></a>
             </div>
         </paper-card>
-    </div>
+    </div> -->
 </template>
 <script>
     Polymer({
