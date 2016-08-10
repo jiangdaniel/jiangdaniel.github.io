@@ -1,4 +1,5 @@
 <link rel="import" href="../web-app/shared-styles.html">
+<link rel="import" href="../behaviors/utility.html">
 
 <dom-module id="page-resume">
 <template>
@@ -43,6 +44,9 @@
         .card-heading {
             font-size: 20px;
         }
+        .animation-hidden {
+            visibility: hidden;
+        }
 
         /*Temp styles for projects*/
         .category-header {
@@ -85,7 +89,7 @@
 
     <h2 class="heading">Technical Skills</h2>
 
-    <bag-of-stuff>
+    <bag-of-stuff class="animation-hidden">
         <li item>Python</li>
         <li item>HTML</li>
         <li item>CSS/SASS</li>
@@ -197,7 +201,40 @@
 <script>
     Polymer({
         is: "page-resume",
-        behaviors: [Polymer.NeonAnimatableBehavior]
+        behaviors: [Polymer.NeonAnimationRunnerBehavior, Daniel.UtilityBehavior],
+        ready: function() {
+            this.bagOfStuffPresent = false;
+        },
+        listeners: {
+            'content-scroll-simulated': 'scrollEvents'
+        },
+        scrollEvents: function() {
+            if (!this.bagOfStuffPresent && this.isInView(this.$$('bag-of-stuff'))) {
+                this.bagOfStuffPresent = true;
+                this.playAnimation('entry');
+                this.$$('bag-of-stuff').toggleClass('animation-hidden', false);
+            }
+        },
+        properties: {
+            animationConfig: {
+                value: function() {
+                    var children = this.$$('bag-of-stuff').getEffectiveChildren();
+                    children = Array.prototype.slice.call(children);
+
+                    return {
+                        'entry': [{
+                            name: 'cascaded-animation',
+                            animation: 'fade-in-animation',
+                            nodes: children
+                        }, {
+                            name: 'cascaded-animation',
+                            animation: 'slide-from-right-animation',
+                            nodes: children
+                        }]
+                    };
+                }
+            }
+        }
     });
 </script>
 </dom-module>

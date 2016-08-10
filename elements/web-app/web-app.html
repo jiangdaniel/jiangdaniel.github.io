@@ -106,7 +106,11 @@
             });
 	    },
         listeners: {
-            'page-switcher.iron-select': 'scrollToTop'
+            'page-switcher.iron-select': 'scrollToTop',
+            'content-scroll': 'contentScrollChildren'
+        },
+        contentScrollChildren: function() {
+            this.$$('page-resume').fire('content-scroll-simulated');
         },
         scrollToTop: function() {
             this.$.main.scrollToTop();
