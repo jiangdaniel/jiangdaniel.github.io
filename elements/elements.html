@@ -8603,6 +8603,424 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
     }
   });
 </script>
+<script>
+  /**
+   * `IronResizableBehavior` is a behavior that can be used in Polymer elements to
+   * coordinate the flow of resize events between "resizers" (elements that control the
+   * size or hidden state of their children) and "resizables" (elements that need to be
+   * notified when they are resized or un-hidden by their parents in order to take
+   * action on their new measurements).
+   * 
+   * Elements that perform measurement should add the `IronResizableBehavior` behavior to
+   * their element definition and listen for the `iron-resize` event on themselves.
+   * This event will be fired when they become showing after having been hidden,
+   * when they are resized explicitly by another resizable, or when the window has been
+   * resized.
+   * 
+   * Note, the `iron-resize` event is non-bubbling.
+   *
+   * @polymerBehavior Polymer.IronResizableBehavior
+   * @demo demo/index.html
+   **/
+  Polymer.IronResizableBehavior = {
+    properties: {
+      /**
+       * The closest ancestor element that implements `IronResizableBehavior`.
+       */
+      _parentResizable: {
+        type: Object,
+        observer: '_parentResizableChanged'
+      },
+
+      /**
+       * True if this element is currently notifying its descedant elements of
+       * resize.
+       */
+      _notifyingDescendant: {
+        type: Boolean,
+        value: false
+      }
+    },
+
+    listeners: {
+      'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
+    },
+
+    created: function() {
+      // We don't really need property effects on these, and also we want them
+      // to be created before the `_parentResizable` observer fires:
+      this._interestedResizables = [];
+      this._boundNotifyResize = this.notifyResize.bind(this);
+    },
+
+    attached: function() {
+      this.fire('iron-request-resize-notifications', null, {
+        node: this,
+        bubbles: true,
+        cancelable: true
+      });
+
+      if (!this._parentResizable) {
+        window.addEventListener('resize', this._boundNotifyResize);
+        this.notifyResize();
+      }
+    },
+
+    detached: function() {
+      if (this._parentResizable) {
+        this._parentResizable.stopResizeNotificationsFor(this);
+      } else {
+        window.removeEventListener('resize', this._boundNotifyResize);
+      }
+
+      this._parentResizable = null;
+    },
+
+    /**
+     * Can be called to manually notify a resizable and its descendant
+     * resizables of a resize change.
+     */
+    notifyResize: function() {
+      if (!this.isAttached) {
+        return;
+      }
+
+      this._interestedResizables.forEach(function(resizable) {
+        if (this.resizerShouldNotify(resizable)) {
+          this._notifyDescendant(resizable);
+        }
+      }, this);
+
+      this._fireResize();
+    },
+
+    /**
+     * Used to assign the closest resizable ancestor to this resizable
+     * if the ancestor detects a request for notifications.
+     */
+    assignParentResizable: function(parentResizable) {
+      this._parentResizable = parentResizable;
+    },
+
+    /**
+     * Used to remove a resizable descendant from the list of descendants
+     * that should be notified of a resize change.
+     */
+    stopResizeNotificationsFor: function(target) {
+      var index = this._interestedResizables.indexOf(target);
+
+      if (index > -1) {
+        this._interestedResizables.splice(index, 1);
+        this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
+      }
+    },
+
+    /**
+     * This method can be overridden to filter nested elements that should or
+     * should not be notified by the current element. Return true if an element
+     * should be notified, or false if it should not be notified.
+     *
+     * @param {HTMLElement} element A candidate descendant element that
+     * implements `IronResizableBehavior`.
+     * @return {boolean} True if the `element` should be notified of resize.
+     */
+    resizerShouldNotify: function(element) { return true; },
+
+    _onDescendantIronResize: function(event) {
+      if (this._notifyingDescendant) {
+        event.stopPropagation();
+        return;
+      }
+
+      // NOTE(cdata): In ShadowDOM, event retargetting makes echoing of the
+      // otherwise non-bubbling event "just work." We do it manually here for
+      // the case where Polymer is not using shadow roots for whatever reason:
+      if (!Polymer.Settings.useShadow) {
+        this._fireResize();
+      }
+    },
+
+    _fireResize: function() {
+      this.fire('iron-resize', null, {
+        node: this,
+        bubbles: false
+      });
+    },
+
+    _onIronRequestResizeNotifications: function(event) {
+      var target = event.path ? event.path[0] : event.target;
+
+      if (target === this) {
+        return;
+      }
+
+      if (this._interestedResizables.indexOf(target) === -1) {
+        this._interestedResizables.push(target);
+        this.listen(target, 'iron-resize', '_onDescendantIronResize');
+      }
+
+      target.assignParentResizable(this);
+      this._notifyDescendant(target);
+
+      event.stopPropagation();
+    },
+
+    _parentResizableChanged: function(parentResizable) {
+      if (parentResizable) {
+        window.removeEventListener('resize', this._boundNotifyResize);
+      }
+    },
+
+    _notifyDescendant: function(descendant) {
+      // NOTE(cdata): In IE10, attached is fired on children first, so it's
+      // important not to notify them if the parent is not attached yet (or
+      // else they will get redundantly notified when the parent attaches).
+      if (!this.isAttached) {
+        return;
+      }
+
+      this._notifyingDescendant = true;
+      descendant.notifyResize();
+      this._notifyingDescendant = false;
+    }
+  };
+</script>
+
+
+
+<dom-module id="iron-collapse" assetpath="../bower_components/iron-collapse/">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        transition-duration: 300ms;
+        overflow: visible;
+      }
+
+      :host(.iron-collapse-closed) {
+        display: none;
+      }
+
+      :host(:not(.iron-collapse-opened)) {
+        overflow: hidden;
+      }
+    </style>
+
+    <content></content>
+
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'iron-collapse',
+
+    behaviors: [
+      Polymer.IronResizableBehavior
+    ],
+
+    properties: {
+
+      /**
+       * If true, the orientation is horizontal; otherwise is vertical.
+       *
+       * @attribute horizontal
+       */
+      horizontal: {
+        type: Boolean,
+        value: false,
+        observer: '_horizontalChanged'
+      },
+
+      /**
+       * Set opened to true to show the collapse element and to false to hide it.
+       *
+       * @attribute opened
+       */
+      opened: {
+        type: Boolean,
+        value: false,
+        notify: true,
+        observer: '_openedChanged'
+      },
+
+      /**
+       * Set noAnimation to true to disable animations
+       *
+       * @attribute noAnimation
+       */
+      noAnimation: {
+        type: Boolean
+      },
+
+    },
+
+    get dimension() {
+      return this.horizontal ? 'width' : 'height';
+    },
+
+    /**
+     * `maxWidth` or `maxHeight`.
+     * @private
+     */    
+    get _dimensionMax() {
+      return this.horizontal ? 'maxWidth' : 'maxHeight';
+    },
+
+    /**
+     * `max-width` or `max-height`.
+     * @private
+     */
+    get _dimensionMaxCss() {
+      return this.horizontal ? 'max-width' : 'max-height';
+    },
+
+    hostAttributes: {
+      role: 'group',
+      'aria-hidden': 'true',
+      'aria-expanded': 'false'
+    },
+
+    listeners: {
+      transitionend: '_transitionEnd'
+    },
+
+    attached: function() {
+      // It will take care of setting correct classes and styles.
+      this._transitionEnd();
+    },
+
+    /**
+     * Toggle the opened state.
+     *
+     * @method toggle
+     */
+    toggle: function() {
+      this.opened = !this.opened;
+    },
+
+    show: function() {
+      this.opened = true;
+    },
+
+    hide: function() {
+      this.opened = false;
+    },
+
+    /**
+     * Updates the size of the element.
+     * @param {!String} size The new value for `maxWidth`/`maxHeight` as css property value, usually `auto` or `0px`.
+     * @param {boolean=} animated if `true` updates the size with an animation, otherwise without.
+     */     
+    updateSize: function(size, animated) {
+      // No change!
+      var curSize = this.style[this._dimensionMax];
+      if (curSize === size || (size === 'auto' && !curSize)) {
+        return;
+      }
+
+      this._updateTransition(false);
+      // If we can animate, must do some prep work.
+      if (animated && !this.noAnimation && this._isDisplayed) {
+        // Animation will start at the current size.
+        var startSize = this._calcSize();
+        // For `auto` we must calculate what is the final size for the animation.
+        // After the transition is done, _transitionEnd will set the size back to `auto`.
+        if (size === 'auto') {
+          this.style[this._dimensionMax] = '';
+          size = this._calcSize();
+        }
+        // Go to startSize without animation.
+        this.style[this._dimensionMax] = startSize;
+        // Force layout to ensure transition will go. Set offsetHeight to itself
+        // so that compilers won't remove it.
+        this.offsetHeight = this.offsetHeight;
+        // Enable animation.
+        this._updateTransition(true);
+      }
+      // Set the final size.
+      if (size === 'auto') {
+        this.style[this._dimensionMax] = '';
+      } else {
+        this.style[this._dimensionMax] = size;
+      }
+    },
+
+    /**
+     * enableTransition() is deprecated, but left over so it doesn't break existing code.
+     * Please use `noAnimation` property instead.
+     *
+     * @method enableTransition
+     * @deprecated since version 1.0.4
+     */
+    enableTransition: function(enabled) {
+      Polymer.Base._warn('`enableTransition()` is deprecated, use `noAnimation` instead.');
+      this.noAnimation = !enabled;
+    },
+
+    _updateTransition: function(enabled) {
+      this.style.transitionDuration = (enabled && !this.noAnimation) ? '' : '0s';
+    },
+
+    _horizontalChanged: function() {
+      this.style.transitionProperty = this._dimensionMaxCss;
+      var otherDimension = this._dimensionMax === 'maxWidth' ? 'maxHeight' : 'maxWidth';
+      this.style[otherDimension] = '';
+      this.updateSize(this.opened ? 'auto' : '0px', false);
+    },
+
+    _openedChanged: function() {
+      this.setAttribute('aria-expanded', this.opened);
+      this.setAttribute('aria-hidden', !this.opened);
+
+      this.toggleClass('iron-collapse-closed', false);
+      this.toggleClass('iron-collapse-opened', false);
+      this.updateSize(this.opened ? 'auto' : '0px', true);
+
+      // Focus the current collapse.
+      if (this.opened) {
+        this.focus();
+      }
+      if (this.noAnimation) {
+        this._transitionEnd();
+      }
+    },
+
+    _transitionEnd: function() {
+      if (this.opened) {
+        this.style[this._dimensionMax] = '';
+      }
+      this.toggleClass('iron-collapse-closed', !this.opened);
+      this.toggleClass('iron-collapse-opened', this.opened);
+      this._updateTransition(false);
+      this.notifyResize();
+    },
+
+    /**
+     * Simplistic heuristic to detect if element has a parent with display: none
+     *
+     * @private
+     */
+    get _isDisplayed() {
+      var rect = this.getBoundingClientRect();
+      for (var prop in rect) {
+        if (rect[prop] !== 0) return true;
+      }
+      return false;
+    },
+
+    _calcSize: function() {
+      return this.getBoundingClientRect()[this.dimension] + 'px';
+    }
+
+  });
+
+</script>
 
 <dom-module id="iron-flex" assetpath="../bower_components/iron-flex-layout/">
   <template>
@@ -10246,189 +10664,6 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
 <g id="zoom-out"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zM7 9h5v1H7z"></path></g>
 </defs></svg>
 </iron-iconset-svg>
-<script>
-  /**
-   * `IronResizableBehavior` is a behavior that can be used in Polymer elements to
-   * coordinate the flow of resize events between "resizers" (elements that control the
-   * size or hidden state of their children) and "resizables" (elements that need to be
-   * notified when they are resized or un-hidden by their parents in order to take
-   * action on their new measurements).
-   * 
-   * Elements that perform measurement should add the `IronResizableBehavior` behavior to
-   * their element definition and listen for the `iron-resize` event on themselves.
-   * This event will be fired when they become showing after having been hidden,
-   * when they are resized explicitly by another resizable, or when the window has been
-   * resized.
-   * 
-   * Note, the `iron-resize` event is non-bubbling.
-   *
-   * @polymerBehavior Polymer.IronResizableBehavior
-   * @demo demo/index.html
-   **/
-  Polymer.IronResizableBehavior = {
-    properties: {
-      /**
-       * The closest ancestor element that implements `IronResizableBehavior`.
-       */
-      _parentResizable: {
-        type: Object,
-        observer: '_parentResizableChanged'
-      },
-
-      /**
-       * True if this element is currently notifying its descedant elements of
-       * resize.
-       */
-      _notifyingDescendant: {
-        type: Boolean,
-        value: false
-      }
-    },
-
-    listeners: {
-      'iron-request-resize-notifications': '_onIronRequestResizeNotifications'
-    },
-
-    created: function() {
-      // We don't really need property effects on these, and also we want them
-      // to be created before the `_parentResizable` observer fires:
-      this._interestedResizables = [];
-      this._boundNotifyResize = this.notifyResize.bind(this);
-    },
-
-    attached: function() {
-      this.fire('iron-request-resize-notifications', null, {
-        node: this,
-        bubbles: true,
-        cancelable: true
-      });
-
-      if (!this._parentResizable) {
-        window.addEventListener('resize', this._boundNotifyResize);
-        this.notifyResize();
-      }
-    },
-
-    detached: function() {
-      if (this._parentResizable) {
-        this._parentResizable.stopResizeNotificationsFor(this);
-      } else {
-        window.removeEventListener('resize', this._boundNotifyResize);
-      }
-
-      this._parentResizable = null;
-    },
-
-    /**
-     * Can be called to manually notify a resizable and its descendant
-     * resizables of a resize change.
-     */
-    notifyResize: function() {
-      if (!this.isAttached) {
-        return;
-      }
-
-      this._interestedResizables.forEach(function(resizable) {
-        if (this.resizerShouldNotify(resizable)) {
-          this._notifyDescendant(resizable);
-        }
-      }, this);
-
-      this._fireResize();
-    },
-
-    /**
-     * Used to assign the closest resizable ancestor to this resizable
-     * if the ancestor detects a request for notifications.
-     */
-    assignParentResizable: function(parentResizable) {
-      this._parentResizable = parentResizable;
-    },
-
-    /**
-     * Used to remove a resizable descendant from the list of descendants
-     * that should be notified of a resize change.
-     */
-    stopResizeNotificationsFor: function(target) {
-      var index = this._interestedResizables.indexOf(target);
-
-      if (index > -1) {
-        this._interestedResizables.splice(index, 1);
-        this.unlisten(target, 'iron-resize', '_onDescendantIronResize');
-      }
-    },
-
-    /**
-     * This method can be overridden to filter nested elements that should or
-     * should not be notified by the current element. Return true if an element
-     * should be notified, or false if it should not be notified.
-     *
-     * @param {HTMLElement} element A candidate descendant element that
-     * implements `IronResizableBehavior`.
-     * @return {boolean} True if the `element` should be notified of resize.
-     */
-    resizerShouldNotify: function(element) { return true; },
-
-    _onDescendantIronResize: function(event) {
-      if (this._notifyingDescendant) {
-        event.stopPropagation();
-        return;
-      }
-
-      // NOTE(cdata): In ShadowDOM, event retargetting makes echoing of the
-      // otherwise non-bubbling event "just work." We do it manually here for
-      // the case where Polymer is not using shadow roots for whatever reason:
-      if (!Polymer.Settings.useShadow) {
-        this._fireResize();
-      }
-    },
-
-    _fireResize: function() {
-      this.fire('iron-resize', null, {
-        node: this,
-        bubbles: false
-      });
-    },
-
-    _onIronRequestResizeNotifications: function(event) {
-      var target = event.path ? event.path[0] : event.target;
-
-      if (target === this) {
-        return;
-      }
-
-      if (this._interestedResizables.indexOf(target) === -1) {
-        this._interestedResizables.push(target);
-        this.listen(target, 'iron-resize', '_onDescendantIronResize');
-      }
-
-      target.assignParentResizable(this);
-      this._notifyDescendant(target);
-
-      event.stopPropagation();
-    },
-
-    _parentResizableChanged: function(parentResizable) {
-      if (parentResizable) {
-        window.removeEventListener('resize', this._boundNotifyResize);
-      }
-    },
-
-    _notifyDescendant: function(descendant) {
-      // NOTE(cdata): In IE10, attached is fired on children first, so it's
-      // important not to notify them if the parent is not attached yet (or
-      // else they will get redundantly notified when the parent attaches).
-      if (!this.isAttached) {
-        return;
-      }
-
-      this._notifyingDescendant = true;
-      descendant.notifyResize();
-      this._notifyingDescendant = false;
-    }
-  };
-</script>
-
 <script>
 
   /**
@@ -17127,7 +17362,7 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
 
             <a href="#/"><paper-item paper-drawer-toggle="">Home<paper-ripple></paper-ripple></paper-item></a>
             <a href="#/resume"><paper-item paper-drawer-toggle="">Resume<paper-ripple></paper-ripple></paper-item></a>
-            <paper-item paper-drawer-toggle="">Contact<paper-ripple></paper-ripple></paper-item>
+            
         </paper-header-panel>
 
         <paper-scroll-header-panel id="main" main="">
@@ -17147,11 +17382,7 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
 
             
 
-            <page-footer>
-                <div class="container">
-                    Daniel Jiang
-                </div>
-            </page-footer>
+            <page-footer></page-footer>
         </paper-scroll-header-panel>
 
     </paper-drawer-panel>
@@ -17293,6 +17524,9 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
         .project-image {
             width: 50%;
         }
+        iron-collapse {
+            margin-top: 15px;
+        }
     </style>
 
     <div id="resume-intro">
@@ -17307,14 +17541,56 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
             <div text="">
                 <div primary="">University of California, Berkeley</div>
                 <div secondary="">B.A. Computer Science, expected May 2019<br>GPA: 4.00</div>
-                <p main="">Relevant courses:
-                    </p><ul>
+
+                <iron-collapse id="relevant-courses">Relevant courses:
+                    <ul>
+                        <li>CompSci 61B: Data Structures (in progress)</li>
+                        <li>Stat 20: Introduction to Probability and Statistics (in progress)</li>
                         <li>CompSci 61A: The Structure and Interpretation of Computer Programs</li>
                         <li>Math 54: Linear Algebra and Differential Equations</li>
                         <li>Math 1B: Calculus</li>
                         <li>Computer Science and Information Systems 10A: Programming Methods I: Java</li>
                     </ul>
-                <p></p>
+                </iron-collapse>
+
+                <iron-collapse id="all-courses">
+                    <div>
+                        Fall 2016:
+                        <ul>
+                            <li>CompSci 61B: Data Structures (in progress)</li>
+                            <li>Stat 20: Introduction to Probability and Statistics (in progress)</li>
+                            <li>IntegBi C13: Origins: from the Big Bang to the Emergence of Humans (in progress)</li>
+                            <li>Anthro 2AC: Introduction to Archaeology (in progress)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Spring 2016:
+                        <ul>
+                            <li>CompSci 61A: The Structure and Interpretation of Computer Programs</li>
+                            <li>Math 54: Linear Algebra and Differential Equations</li>
+                            <li>Econ 1: Introduction to Economics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Fall 2015:
+                        <ul>
+                            <li>Math 1B: Calculus</li>
+                            <li>Rhetoric R1B: The Craft of Writing</li>
+                            <li>Music 27: Introduction to Western Music</li>
+                            <li>EPS 80: Environmental Earth Sciences</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Monterey Peninsula College (Community College):
+                        <ul>
+                            <li>Computer Science and Information Systems 10A: Programming Methods I: Java</li>
+                            <li>Philosophy 2: Introduction to Philosophy</li>
+                        </ul>
+                    </div>
+                </iron-collapse>
+
+                <paper-button on-tap="toggleAllCourses">[[toggleButtonText(allCourses)]]</paper-button>
+
             </div>
         </div>
     </module-element-2>
@@ -17355,7 +17631,8 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
             <img src="../assets/images/sea5.png" alt="Screenshot of SEA5" class="project-image">
             <p>
                 SEA<sup>5</sup> is a web application that aims to provide past, present, and predicted space environment information for specific missions, orbits, and user-specified locations throughout the heliosphere, geospace, and on the ground.<br><br>
-                <i>Technologies used: HTML, CSS, JavaScript, Java, Web Components, Google Polymer, Plotly.js</i>
+                <i>Technologies used: HTML, CSS, JavaScript, Java, Java servlets, Web Components, Google Polymer, Plotly.js</i><br><br>
+                <a href="../assets/images/sea5-poster.pdf" target="_blank">See my poster on SEA5</a>
             </p>
         </div>
     </div>
@@ -17403,7 +17680,11 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
         behaviors: [Polymer.NeonAnimationRunnerBehavior, Daniel.UtilityBehavior],
         ready: function() {
             this.bagOfStuffPresent = false;
+            this.allCourses = false;
         },
+        observers: [
+            'toggleCollapse(allCourses)'
+        ],
         listeners: {
             'content-scroll-simulated': 'scrollEvents'
         },
@@ -17433,19 +17714,42 @@ return d.join("&")},r.fn.extend({serialize:function(){return r.param(this.serial
                     };
                 }
             }
+        },
+        toggleAllCourses: function() {
+            this.allCourses = !this.allCourses;
+        },
+        toggleCollapse: function() {
+            const toggleOrder =  (this.allCourses ? ['relevant-courses', 'all-courses'] : ['all-courses', 'relevant-courses']);
+            this.$[toggleOrder[0]].hide();
+            this.async(function() {
+                this.$[toggleOrder[1]].show();
+            }, 300);
+        },
+        toggleButtonText: function() {
+            return (this.allCourses ? 'Show relevant courses' : 'Show all courses');
         }
     });
 </script>
 </dom-module>
 <dom-module id="page-footer" assetpath="web-app/">
 <template>
-    <style>
+    <style include="shared-styles">
         :host {
             display: block;
             padding: 50px 0;
         }
+        i {
+            margin: 20px 5px 0 0;
+        }
     </style>
-    <content></content>
+    <div class="container">
+        <div>Daniel Jiang</div>
+        <div><a href="mailto:danieljiang.berkeley.edu">danieljiang@berkeley.edu</a></div>
+        <div>
+            <a href="https://github.com/jiangdaniel" target="_blank" aria-label="Github"><i class="fa fa-github fa-lg" aria-hidden="true"></i></a>
+            <a href="https://www.linkedin.com/in/daniel-jiang-934400111" target="_blank" aria-label="LinkedIn"><i class="fa fa-linkedin-square fa-lg" aria-hidden="true"></i></a>
+        </div>
+    </div>
 </template>
 <script>
     Polymer({

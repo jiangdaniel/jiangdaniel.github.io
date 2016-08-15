@@ -61,6 +61,9 @@
         .project-image {
             width: 50%;
         }
+        iron-collapse {
+            margin-top: 15px;
+        }
     </style>
 
     <div id="resume-intro">
@@ -75,14 +78,56 @@
             <div text>
                 <div primary>University of California, Berkeley</div>
                 <div secondary>B.A. Computer Science, expected May 2019<br>GPA: 4.00</div>
-                <p main>Relevant courses:
+
+                <iron-collapse id="relevant-courses">Relevant courses:
                     <ul>
+                        <li>CompSci 61B: Data Structures (in progress)</li>
+                        <li>Stat 20: Introduction to Probability and Statistics (in progress)</li>
                         <li>CompSci 61A: The Structure and Interpretation of Computer Programs</li>
                         <li>Math 54: Linear Algebra and Differential Equations</li>
                         <li>Math 1B: Calculus</li>
                         <li>Computer Science and Information Systems 10A: Programming Methods I: Java</li>
                     </ul>
-                </p>
+                </iron-collapse>
+
+                <iron-collapse id="all-courses">
+                    <div>
+                        Fall 2016:
+                        <ul>
+                            <li>CompSci 61B: Data Structures (in progress)</li>
+                            <li>Stat 20: Introduction to Probability and Statistics (in progress)</li>
+                            <li>IntegBi C13: Origins: from the Big Bang to the Emergence of Humans (in progress)</li>
+                            <li>Anthro 2AC: Introduction to Archaeology (in progress)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Spring 2016:
+                        <ul>
+                            <li>CompSci 61A: The Structure and Interpretation of Computer Programs</li>
+                            <li>Math 54: Linear Algebra and Differential Equations</li>
+                            <li>Econ 1: Introduction to Economics</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Fall 2015:
+                        <ul>
+                            <li>Math 1B: Calculus</li>
+                            <li>Rhetoric R1B: The Craft of Writing</li>
+                            <li>Music 27: Introduction to Western Music</li>
+                            <li>EPS 80: Environmental Earth Sciences</li>
+                        </ul>
+                    </div>
+                    <div>
+                        Monterey Peninsula College (Community College):
+                        <ul>
+                            <li>Computer Science and Information Systems 10A: Programming Methods I: Java</li>
+                            <li>Philosophy 2: Introduction to Philosophy</li>
+                        </ul>
+                    </div>
+                </iron-collapse>
+
+                <paper-button on-tap="toggleAllCourses">[[toggleButtonText(allCourses)]]</paper-button>
+
             </div>
         </div>
     </module-element-2>
@@ -123,7 +168,8 @@
             <img src="../../assets/images/sea5.png" alt="Screenshot of SEA5" class="project-image"></img>
             <p>
                 SEA<sup>5</sup> is a web application that aims to provide past, present, and predicted space environment information for specific missions, orbits, and user-specified locations throughout the heliosphere, geospace, and on the ground.<br><br>
-                <i>Technologies used: HTML, CSS, JavaScript, Java, Web Components, Google Polymer, Plotly.js</i>
+                <i>Technologies used: HTML, CSS, JavaScript, Java, Java servlets, Web Components, Google Polymer, Plotly.js</i><br><br>
+                <a href="../../assets/images/sea5-poster.pdf" target="_blank">See my poster on SEA5</a>
             </p>
         </div>
     </div>
@@ -204,7 +250,11 @@
         behaviors: [Polymer.NeonAnimationRunnerBehavior, Daniel.UtilityBehavior],
         ready: function() {
             this.bagOfStuffPresent = false;
+            this.allCourses = false;
         },
+        observers: [
+            'toggleCollapse(allCourses)'
+        ],
         listeners: {
             'content-scroll-simulated': 'scrollEvents'
         },
@@ -234,6 +284,19 @@
                     };
                 }
             }
+        },
+        toggleAllCourses: function() {
+            this.allCourses = !this.allCourses;
+        },
+        toggleCollapse: function() {
+            const toggleOrder =  (this.allCourses ? ['relevant-courses', 'all-courses'] : ['all-courses', 'relevant-courses']);
+            this.$[toggleOrder[0]].hide();
+            this.async(function() {
+                this.$[toggleOrder[1]].show();
+            }, 300);
+        },
+        toggleButtonText: function() {
+            return (this.allCourses ? 'Show relevant courses' : 'Show all courses');
         }
     });
 </script>
