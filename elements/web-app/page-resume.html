@@ -275,11 +275,15 @@
                         'entry': [{
                             name: 'cascaded-animation',
                             animation: 'fade-in-animation',
-                            nodes: children
+                            nodes: children,
+                            nodeDelay: 1000,
+                            timing: 1000
                         }, {
                             name: 'cascaded-animation',
                             animation: 'slide-from-right-animation',
-                            nodes: children
+                            nodes: children,
+                            nodeDelay: 500,
+                            timing: 500
                         }]
                     };
                 }
