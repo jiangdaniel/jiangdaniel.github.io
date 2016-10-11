@@ -20,6 +20,7 @@
             background-blend-mode: multiply;
             background-size: cover;
             background-position: center;
+            margin-top: 30px;
             //margin-bottom: 40px;
         }
         #nasa {
@@ -34,32 +35,32 @@
         }
         paper-card {
             /*max-width: 475px;*/
-            min-width: 300px;
+            width: 400px;
+            min-width: 400px;
+            /*min-width: 300px;*/
             margin: 20px 10px;
             font-family: inherit;
         }
-        paper-card a {
-            text-decoration: none;
+        @media screen and (max-width:550px) {
+    		paper-card {
+    			width: 300px;
+                min-width: 300px;
+    		}
+	    }
+        paper-card:hover {
+            elevation: 5;
         }
         .card-heading {
             font-size: 20px;
         }
+        /*.card-content {
+            pointer-events: none;
+        }*/
+        paper-card > ::content .header {
+            pointer-events: none;
+        }
         .animation-hidden {
             visibility: hidden;
-        }
-
-        /*Temp styles for projects*/
-        .category-header {
-        }
-        .project-wrapper {
-            margin: 20px 0 60px 0;
-        }
-        .project-header {
-            font-size: 30px;
-            margin: 25px 0 15px 0;
-        }
-        .project-image {
-            width: 50%;
         }
         iron-collapse {
             margin-top: 15px;
@@ -165,40 +166,27 @@
         </div>
     </module-element>
 
-    <div class="container">
-        <!-- <div class="category-header">Projects</div> -->
-
-        <div class="project-wrapper">
-            <div class="project-header">Space Environment Automated Alert & Anomaly Analysis Assistant (SEA<sup>5</sup>)</div>
-            <img src="../../assets/images/sea5.png" alt="Screenshot of SEA5" class="project-image"></img>
-            <p>
-                SEA<sup>5</sup> is a web application that aims to provide past, present, and predicted space environment information for specific missions, orbits, and user-specified locations throughout the heliosphere, geospace, and on the ground.<br><br>
-                <i>Technologies used: JavaScript, Google Polymer, Web Components, Java, Java servlets, HTML, CSS, Plotly.js</i><br><br>
-                <a href="../../assets/images/sea5-poster.pdf" target="_blank">See my poster on SEA5</a>
-            </p>
-        </div>
-    </div>
-
-    <!-- <div class="container horizontal layout around-justified wrap">
-        <paper-card class="flex" image="assets/images/website.png">
+    <div class="horizontal layout" style="overflow: auto">
+        <div style="min-width:7%"></div>
+        <paper-card image="assets/images/website.jpg" animated-shadow on-mouseover="hover" on-mouseout="noHover">
             <div class="card-content">
-                <span class="card-heading">SEA<sup>5</sup></span><br><br>
-                Space Environment Automated Alert & Anomaly Analysis Assistant<br><br>
-                Technologies used: HTML, CSS, JavaScript, Java, Web Components, Google Polymer, Plotly.js
+                <span class="card-heading">Space Environment Automated Alerts & Anomaly Analysis Assistant (SEA<sup>5</sup>)</span><br/><br/>
+                SEA<sup>5</sup> is a web app that provides tailored space environment info to NASA mission operators.
+                <br/><br/>
+                <a href="../../assets/images/sea5-poster.pdf" target="_blank">See my poster</a>
             </div>
-            <div class="card-actions">
-                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
-                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
-            </div>
+            <!-- <div class="card-actions">
+                <a href="../../assets/images/sea5-poster.pdf" target="_blank"><paper-button>Poster</paper-button></a>
+            </div> -->
         </paper-card>
-    </div> -->
-
+        <div style="min-width:7%"></div>
+    </div>
 
     <module-element id="pioneers">
         <div class="container">
             <img src="../../assets/images/pie.svg" alt="Pioneers in Engineering logo" image></img>
             <div text>
-                <div primary>Web Developer and Event Coordinator,</div>
+                <div primary>Software Developer and Event Coordinator,</div>
                 <div secondary>Pioneers in Engineering<span class="locations">Berkeley, CA</span></div>
                 <div tertiary>October 2015 - present</div>
                 <p main>
@@ -207,47 +195,52 @@
             </div>
         </div>
     </module-element>
-    <div class="container">
-        <div class="project-wrapper">
-            <div class="project-header">Final Competition Website</div>
-            <img src="../../assets/images/finalcomp.jpg" alt="Screenshot of Final Competition Website" class="project-image"></img>
-            <p>
-                The Final Competition Website provided a modern, app-like way of accessing the robotics competition match schedule and information.<br><br>
-                <i>Technologies used: JavaScript, Google Polymer, Web Components, HTML, CSS, Gulp, Docker, Google Sheets API</i>
-            </p>
-        </div>
 
-        <div class="project-wrapper">
-            <div class="project-header">Pioneers in Engineering Website</div>
-            <img src="../../assets/images/website.jpg" alt="Screenshot of Pioneers in Engineering Website" class="project-image"></img>
-            <p>
-                The Pioneers in Engineering Website is the main website representing the organization Pioneers in Engineering.<br><br>
-                <i>Technologies used: HTML, SASS, Jekyll, Bootstrap</i>
-            </p>
-        </div>
-    </div>
-    <!-- <div class="container horizontal layout around-justified wrap">
-        <paper-card class="flex" image="assets/images/website.png">
+    <div class="horizontal layout" style="overflow: auto">
+        <div style="min-width:7%"></div>
+        <paper-card image="assets/images/runtime.jpg" animated-shadow on-mouseover="hover" on-mouseout="noHover">
             <div class="card-content">
-                <span class="card-heading">Pioneers in Engineering Website</span><br><br>
-                Technologies used: HTML, SASS, JavaScript, Web Components, Google Polymer, Gulp, Docker, Google Sheets API
+                <span class="card-heading">Robotics Runtime Software</span><br/><br/>
+                The robotics runtime software processes code written by students in order to control a robot.
+                <br/><br/>
+                <a href="https://github.com/pioneers/PieCentral/tree/master/runtime" target="_blank">See the code</a>
             </div>
-            <div class="card-actions">
-                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
-                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
-            </div>
+            <!-- <div class="card-actions">
+                <a href="https://github.com/pioneers/PieCentral/tree/master/runtime" target="_blank"><paper-button>Code</paper-button></a>
+            </div> -->
         </paper-card>
-        <paper-card class="flex" image="assets/images/finalcomp.png">
+
+        <paper-card image="assets/images/finalcomp.jpg" animated-shadow on-mouseover="hover" on-mouseout="noHover">
             <div class="card-content">
-                <span class="card-heading">Final Competition Website</span><br><br>
-                Technologies used: HTML, SASS, Jekyll, Bootstrap
+                <span class="card-heading">Final Competition Website</span><br/><br/>
+                The Final Competition Website provided a modern, app-like way of accessing the robotics competition match schedule and information.
+                <br/><br/>
+                <a href="https://github.com/pioneers/website" target="_blank">See the code</a>
+                <br/>
+                <a href="https://finalcomp.pierobotics.org" target="_blank">See the website</a>
             </div>
-            <div class="card-actions">
+            <!-- <div class="card-actions">
                 <a href="https://github.com/pioneers/website" target="_blank"><paper-button>Code</paper-button></a>
                 <a href="https://finalcomp.pierobotics.org" target="_blank"><paper-button>Website</paper-button></a>
-            </div>
+            </div> -->
         </paper-card>
-    </div> -->
+
+        <paper-card image="assets/images/website.jpg" animated-shadow on-mouseover="hover" on-mouseout="noHover">
+            <div class="card-content">
+                <span class="card-heading">Pioneers in Engineering Website</span><br/><br/>
+                The Pioneers in Engineering Website is the organization's main public-facing website.
+                <br/><br/>
+                <a href="https://github.com/pioneers/finalcomp" target="_blank">See the code</a>
+                <br/>
+                <a href="https://pioneers.berkeley.edu" target="_blank">See the website</a>
+            </div>
+            <!-- <div class="card-actions">
+                <a href="https://github.com/pioneers/finalcomp" target="_blank"><paper-button>Code</paper-button></a>
+                <a href="https://pioneers.berkeley.edu" target="_blank"><paper-button>Website</paper-button></a>
+            </div> -->
+        </paper-card>
+        <div style="min-width:7%"></div>
+    </div>
 </template>
 <script>
     Polymer({
@@ -306,6 +299,12 @@
         },
         toggleButtonText: function() {
             return (this.allCourses ? 'Show relevant courses' : 'Show all courses');
+        },
+        hover: function(e) {
+            Polymer.dom(e).event.srcElement.elevation = 4;
+        },
+        noHover: function(e) {
+            Polymer.dom(e).event.srcElement.elevation = 1;
         }
     });
 </script>
