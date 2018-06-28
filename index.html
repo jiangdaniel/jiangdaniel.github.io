@@ -1,134 +1,45 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Daniel Jiang</title>
+        <link rel="stylesheet" href="bootstrap.min.css" type="text/css">
+                      <!--
+        <script type="text/javascript">
+               var _gaq = _gaq || [];
+               _gaq.push(['_setAccount', 'UA-XXXXXXXX-Y']);
+               _gaq.push(['_trackPageview']);
+               (function()
+                      {
+                  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                 })();
+                        </script> -->
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="mt-5">Daniel Jiang</h1>
+            <p class="lead">Computer Science student at UC Berkeley</p>
+            <p><a href="https://www.linkedin.com/in/daniel-jiang/">LinkedIn</a> <a href="https://github.com/jiangdaniel/">GitHub</a></p>
+            <p>I'm a 4th year undergrad at UC Berkeley. My interests lie in math, deep learning, and optimization.</p>
 
-    <title>Daniel Jiang</title>
+            <h2>Papers</h2>
+            <ul>
+                <li>Cheung, B., <b>Jiang, D. L.</b> The many directions of feedback alignment. Submitted to <i>Conference on Cognitive Computational Neuroscience 2018</i>.</li>
+                <!--<li>Choi, J., <b>Jiang, D. L.</b>, Larson, M., Friedland, G., Hanjalic, A. Discovering and Mitigating Bias in Multimedia Data with Cross-modal Projection. Submitted to <i>ACM Multimedia 2018</i>.-->
+            </ul>
 
-    <link rel="shortcut icon" href="assets/images/favicon.png">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
-    <script src="https://use.fontawesome.com/be9c4d2bda.js"></script>
-  <!-- <link rel="shortcut icon" sizes="32x32" href="/images/app-icon-32.png"> -->
-
-  <!-- For changing the color of the header in Chrome for Android -->
-    <meta name="theme-color" content="#323232">
-
-    <link rel="manifest" href="/manifest.json">
-    <link rel="import" href="elements/elements.html">
-
-    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
-    <script src="bower_components/page/page.js"></script>
-    <style>
-    html, body {
-    	height: 100%;
-    	width: 100%;
-    	margin: 0;
-        padding: 0;
-        font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-    h1 {
-        font-size: 80px;
-        font-weight: 300;
-        margin: 0;
-    }
-    h2 {
-        font-size: 60px;
-        font-weight: 300;
-        margin: 0;
-    }
-    </style>
-
-</head>
-
-<body unresolved>
-    <!-- <template is="dom-bind" id="app">-->
-    <web-app></web-app>
-
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-73322613-1', 'auto');
-        ga('send', 'pageview');
-    </script>
-    <!--</template>
-    <script>
-        var app = document.querySelector('#app');
-        app.baseUrl = '/';
-        if (window.location.port === '') {  // if production
-        // Uncomment app.baseURL below and
-        // set app.baseURL to '/your-pathname/' if running from folder in production
-        // app.baseUrl = '/polymer-starter-kit/';
-        }
-        window.addEventListener('WebComponentsReady', function() {
-
-    // We use Page.js for routing. This is a Micro
-    // client-side router inspired by the Express router
-    // More info: https://visionmedia.github.io/page.js/
-
-    // Removes end / from app.baseUrl which page.base requires for production
-    if (window.location.port === '') {  // if production
-      page.base(app.baseUrl.replace(/\/$/, ''));
-    }
-
-    // Middleware
-    function scrollToTop(ctx, next) {
-      app.scrollPageToTop();
-      next();
-    }
-
-    function closeDrawer(ctx, next) {
-      app.closeDrawer();
-      next();
-    }
-
-    function setFocus(selected){
-      document.querySelector('section[data-route="' + selected + '"]').focus();
-    }
-
-    // Routes
-    page('*', scrollToTop, closeDrawer, function(ctx, next) {
-      next();
-    });
-
-    page('/', function() {
-      app.route = 'home';
-      setFocus(app.route);
-    });
-
-    page(app.baseUrl, function() {
-      app.route = 'home';
-      setFocus(app.route);
-    });
-
-    page('/livestream', function() {
-      app.route = 'livestream';
-      setFocus(app.route);
-    });
-
-    page('/license', function() {
-      app.route = 'license';
-      //setFocus(app.route);
-    });
-
-    // 404
-    // page('*', function() {
-    //   app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
-    //   app.$.toast.show();
-    //   page.redirect(app.baseUrl);
-    // });
-
-    // add #! before urls
-    page({
-      hashbang: true
-    });
-
-  });
-    </script> -->
-</body>
-
+            <h2>Experience</h2>
+            <ul>
+                <li>Student Researcher, Redwood Center for Theoretical Neuroscience</li>
+                <li>Student Researcher, International CS Institute</li>
+                <li>Machine Learning Intern, Amazon A9.com, Palo Alto, CA</li>
+                <li>Software Development Intern, General Motors Cruise Automation, San Francisco, CA</li>
+                <li>Software Development Intern, NASA Goddard Space Flight Center, Greenbelt, MD</li>
+            </ul>
+        </div>
+    </body>
 </html>
+
